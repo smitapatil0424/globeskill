@@ -14,8 +14,6 @@ export default function SystemStatus() {
   const [latency, setLatency] = useState<number | null>(null);
 
   const fetchHealth = useCallback(async () => {
-    setStatusState('loading');
-    setErrorMessage(null);
     const startTime = performance.now();
 
     try {
@@ -25,6 +23,7 @@ export default function SystemStatus() {
           'Accept': 'application/json',
         },
       });
+      setErrorMessage(null);
 
       const responseTime = Math.round(performance.now() - startTime);
       setLatency(responseTime);
@@ -51,8 +50,50 @@ export default function SystemStatus() {
   }, []);
 
   useEffect(() => {
-    fetchHealth();
-  }, [fetchHealth]);
+    let ignore = false;
+
+    async function loadInitialHealth() {
+      try {
+        const startTime = performance.now();
+        const response = await fetch('/api/health', {
+          cache: 'no-store',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        const responseTime = Math.round(performance.now() - startTime);
+
+        if (!response.ok) {
+          throw new Error(`Server returned HTTP status ${response.status}`);
+        }
+
+        const result: PlatformStatus = await response.json();
+        if (!ignore) {
+          setLatency(responseTime);
+          if (result.status === 'ok' || response.ok) {
+            setData(result);
+            setStatusState('success');
+            setLastChecked(new Date());
+          } else {
+            throw new Error(result.message || 'Platform reported unhealthy status');
+          }
+        }
+      } catch (err) {
+        if (!ignore) {
+          const msg = err instanceof Error ? err.message : 'Unable to connect to /api/health';
+          setErrorMessage(msg);
+          setStatusState('error');
+          setLastChecked(new Date());
+        }
+      }
+    }
+
+    loadInitialHealth();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <section className={styles.section} aria-labelledby="system-status-heading">

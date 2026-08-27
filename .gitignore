@@ -28,9 +28,13 @@ next-env.d.ts
 # Environment Variables, Secrets & Credentials (DO NOT COMMIT)
 .env
 .env.*
-!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.env
 *.env.*
+!.env.example
 *.secret
 *.secrets
 secrets.json

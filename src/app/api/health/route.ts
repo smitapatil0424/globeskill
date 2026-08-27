@@ -1,39 +1,28 @@
 import { NextResponse } from 'next/server';
-import { getPlatformStatus } from '@/services/platform.service';
+import { getPlatformStatus } from '@/lib/platform';
 
 /**
  * ============================================================================
- * API / BACKEND LAYER
+ * API ROUTE LAYER (NEXT.JS APP ROUTER CONTROLLER)
  * ============================================================================
  * Endpoint: GET /api/health
  * 
- * Flow:
- *  1. Client sends GET request to /api/health
- *  2. Route handler delegates data retrieval to getPlatformStatus() (Business Logic)
- *  3. Route handler formats and returns the JSON response with HTTP status 200
+ * Architectural Flow:
+ *  [1] Frontend (Browser/Client) calls GET /api/health
+ *  [2] Next.js API Route handler intercepts the incoming HTTP request
+ *  [3] API Route delegates data retrieval to Business Logic: getPlatformStatus()
+ *  [4] API Route serializes the returned object into a clean JSON response
  */
 export async function GET() {
-  try {
-    // Call reusable business logic function
-    const platformData = getPlatformStatus();
+  // Step 3: Invoke reusable business logic
+  const statusData = getPlatformStatus();
 
-    // Return formatted JSON response
-    return NextResponse.json(platformData, {
-      status: 200,
-      headers: {
-        'Cache-Control': 'no-store, max-age=0',
-        'Content-Type': 'application/json',
-      },
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        status: 'error',
-        project: 'GlobeSkill',
-        message: 'Failed to retrieve platform status',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
-  }
+  // Step 4: Return JSON response with HTTP 200 status
+  return NextResponse.json(statusData, {
+    status: 200,
+    headers: {
+      'Cache-Control': 'no-store, max-age=0',
+      'Content-Type': 'application/json',
+    },
+  });
 }

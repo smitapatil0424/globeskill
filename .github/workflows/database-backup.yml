@@ -1,0 +1,73 @@
+name: Automated Daily Database Backup & Cold Storage Vault
+
+on:
+  schedule:
+    # Runs daily at 02:00 UTC (07:30 IST) during off-peak hours
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions console
+
+jobs:
+  backup:
+    name: Database Snapshot, Encryption & Cold-Storage Sync
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install PostgreSQL Client Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client gzip gpg
+
+      - name: Generate Database Backup
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          mkdir -p backups
+          if [ -n "$DATABASE_URL" ]; then
+            echo "Dumping live database..."
+            pg_dump "$DATABASE_URL" --clean --if-exists --no-owner --no-privileges | gzip -9 > "backups/globeskill_db_${TIMESTAMP}.sql.gz"
+          else
+            echo "Consolidating schema and seed definitions..."
+            node scripts/backup-supabase.mjs
+          fi
+
+      - name: Encrypt Backup Dump for Cold Storage (AES-256)
+        env:
+          ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY || 'GlobeSkillVault2026SecureKey!' }}
+        run: |
+          cd backups
+          for file in *.sql.gz; do
+            if [ -f "$file" ]; then
+              gpg --symmetric --cipher-algo AES256 --batch --yes --passphrase "$ENCRYPTION_KEY" -o "${file}.gpg" "$file"
+              rm "$file"
+            fi
+          done
+          sha256sum * > checksums.sha256
+
+      - name: Upload to GitHub Artifacts (Staging Retention)
+        uses: actions/upload-artifact@v4
+        with:
+          name: globeskill-encrypted-database-backup
+          path: backups/
+          retention-days: 14
+
+      # Production Cloud Cold Storage Sync (Optional: Requires S3/R2 Secrets)
+      - name: Sync to AWS S3 Glacier / Cloudflare R2 Vault
+        if: env.AWS_ACCESS_KEY_ID != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
+          S3_BUCKET: ${{ secrets.COLD_STORAGE_S3_BUCKET }}
+        run: |
+          aws s3 sync backups/ "s3://${S3_BUCKET}/database-backups/$(date +%Y)/$(date +%m)/" \
+            --storage-class GLACIER

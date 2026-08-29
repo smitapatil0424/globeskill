@@ -7,22 +7,43 @@ import { getPlatformStatus } from '@/lib/platform';
  * ============================================================================
  * Endpoint: GET /api/health
  * 
- * Architectural Flow:
- *  [1] Frontend (Browser/Client) calls GET /api/health
- *  [2] Next.js API Route handler intercepts the incoming HTTP request
- *  [3] API Route delegates data retrieval to Business Logic: getPlatformStatus()
- *  [4] API Route serializes the returned object into a clean JSON response
+ * Flow:
+ *  1. Receives incoming health probe GET request.
+ *  2. Calls async business logic: getPlatformStatus().
+ *  3. Encapsulates execution in try-catch to return appropriate HTTP/JSON error responses.
  */
 export async function GET() {
-  // Step 3: Invoke reusable business logic
-  const statusData = getPlatformStatus();
+  try {
+    // Invoke decoupled business logic (queries Supabase for active course counts)
+    const statusData = await getPlatformStatus();
 
-  // Step 4: Return JSON response with HTTP 200 status
-  return NextResponse.json(statusData, {
-    status: 200,
-    headers: {
-      'Cache-Control': 'no-store, max-age=0',
-      'Content-Type': 'application/json',
-    },
-  });
+    const httpStatusCode = statusData.status === 'ok' ? 200 : 200; // Returns diagnostic JSON payload
+
+    return NextResponse.json(statusData, {
+      status: httpStatusCode,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0',
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    // Catch fatal route-level errors
+    return NextResponse.json(
+      {
+        project: 'GlobeSkill',
+        status: 'error',
+        database: 'error',
+        activeCourses: 0,
+        message: 'Internal server error while evaluating platform status',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      },
+      {
+        status: 500,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
 }

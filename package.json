@@ -6,9 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:db": "node scripts/test-db-and-roles.mjs",
+    "test:security": "node scripts/test-security.mjs",
+    "test": "npm run test:db && npm run test:security",
+    "backup:db": "node scripts/backup-supabase.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.112.4",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "ai": "^7.0.83",
+    "jspdf": "^4.2.1",
     "next": "16.3.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"

@@ -1,0 +1,24 @@
+{
+  "organization": "GlobeSkill Initiative",
+  "backupId": "bkp_2026-08-28T15-07-59-502Z",
+  "timestamp": "2026-08-28T15:07:59.502Z",
+  "retentionPolicyDays": 90,
+  "complianceScope": [
+    "UN_SDG_AUDIT",
+    "DONOR_CAPITAL_GOVERNANCE",
+    "RLS_INTEGRITY"
+  ],
+  "tablesProtected": [
+    "profiles",
+    "training_projects",
+    "student_enrolments",
+    "donations",
+    "assessments",
+    "quiz_questions",
+    "student_attempts",
+    "regional_hubs"
+  ],
+  "files": {
+    "consolidated_schema_and_seed.sql": "8d0e9af16e86410e035df0a5b47cc87e4227ef96b5f9be9480217b519cc05c2b"
+  }
+}

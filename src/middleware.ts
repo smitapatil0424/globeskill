@@ -1,0 +1,125 @@
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
+
+/**
+ * ============================================================================
+ * NEXT.JS EDGE MIDDLEWARE - AUTH & RBAC ROUTE PROTECTION
+ * ============================================================================
+ * Intercepts incoming requests at the edge before rendering or routing happens.
+ *
+ * Responsibilities:
+ *  1. Refreshes active Supabase session cookies automatically.
+ *  2. Authentication Guard: Redirects unauthenticated requests away from protected paths to /login.
+ *  3. RBAC Guard: Protects /admin routes by verifying user has 'NGO Administrator' role.
+ *  4. Guest Guard: Redirects logged-in users away from /login and /signup.
+ */
+export async function middleware(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value)
+        );
+        supabaseResponse = NextResponse.next({
+          request,
+        });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options)
+        );
+      },
+    },
+  });
+
+  // Verify user identity via secure server-side JWT check
+  let user = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data?.user) {
+      user = data.user;
+    }
+  } catch {
+    user = null;
+  }
+
+  // Support seamless local development testing when Supabase keys are in mock mode
+  const isMockDev = !supabaseUrl || supabaseUrl.includes('placeholder') || supabaseUrl.includes('your-project-id');
+  if (!user && isMockDev) {
+    const mockRole = request.cookies.get('mock_role')?.value;
+    const defaultRole = request.nextUrl.pathname.startsWith('/dashboard/admin') ? 'NGO Administrator' : 'Student';
+    if (mockRole || request.nextUrl.pathname.startsWith('/dashboard')) {
+      user = {
+        id: 'mock-user-uuid',
+        email: 'alex.rivera@globeskill.org',
+        user_metadata: {
+          full_name: 'Alex Rivera',
+          role: mockRole || defaultRole,
+        },
+      } as unknown as typeof user;
+    }
+  }
+
+  const { pathname } = request.nextUrl;
+
+  // Path classifications
+  const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/dashboard/admin');
+  const isAuthRoute = pathname === '/login' || pathname === '/signup';
+  const isProtectedRoute = isAdminRoute || pathname.startsWith('/dashboard') || pathname.startsWith('/profile');
+
+  // Rule 1: Not logged in & requesting a protected route -> Redirect to /login
+  if (isProtectedRoute && !user) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Rule 2: Logged in & requesting /admin -> Enforce 'NGO Administrator' Role
+  if (isAdminRoute && user) {
+    let role = user.user_metadata?.role;
+
+    // If role is missing from JWT metadata, fetch from public.profiles
+    if (!role) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      role = profile?.role;
+    }
+
+    if (role !== 'NGO Administrator') {
+      // Forbidden access: Redirect to unauthorized page
+      return NextResponse.redirect(new URL('/unauthorized', request.url));
+    }
+  }
+
+  // Rule 3: Already logged in & requesting login/signup -> Redirect to homepage
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  return supabaseResponse;
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all routes except:
+     * - _next/static (static assets)
+     * - _next/image (image optimization files)
+     * - favicon.ico (browser icon)
+     * - Public API health route
+     * - Public image files (.svg, .png, .jpg, .jpeg, .gif, .webp)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+};

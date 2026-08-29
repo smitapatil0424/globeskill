@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -39,9 +40,29 @@ export default function Home() {
               GlobeSkill
             </span>
           </div>
-          <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 border border-emerald-200">
-            Education Initiative
-          </span>
+          <div className="flex items-center space-x-3">
+            <span className="hidden sm:inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 border border-emerald-200">
+              Education Initiative
+            </span>
+            <Link
+              href="/test"
+              className="text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              Test DB &amp; Roles
+            </Link>
+            <Link
+              href="/login"
+              className="text-sm font-semibold text-slate-700 hover:text-emerald-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-100"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="text-sm font-semibold text-white bg-emerald-700 hover:bg-emerald-800 transition-colors px-3.5 py-1.5 rounded-lg shadow-xs"
+            >
+              Get Started
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -182,7 +203,12 @@ export default function Home() {
       <footer className="w-full border-t border-slate-200 bg-white py-6">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
           <p>&copy; {new Date().getFullYear()} GlobeSkill Initiative. A non-profit education mission.</p>
-          <p className="text-slate-400">Lightweight &bull; Highly Accessible &bull; Free for All Learners</p>
+          <div className="flex items-center space-x-4">
+            <Link href="/test" className="text-emerald-700 hover:text-emerald-800 font-semibold hover:underline">
+              Database &amp; Role Test Console
+            </Link>
+            <span className="text-slate-400">Lightweight &bull; Highly Accessible &bull; Free for All Learners</span>
+          </div>
         </div>
       </footer>
     </div>

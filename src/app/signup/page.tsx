@@ -13,6 +13,7 @@ export default function SignUpPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState<'Student' | 'Trainer' | 'Volunteer'>('Student');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -25,13 +26,12 @@ export default function SignUpPage() {
     setSuccessMessage(null);
 
     try {
-      // Sign up via Supabase Auth with metadata for the DB trigger
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: fullName.trim(),
             role: role as UserRole,
           },
           emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
@@ -43,16 +43,15 @@ export default function SignUpPage() {
       }
 
       if (data.session) {
-        // Auto-confirmed session (email confirmation turned off in Supabase)
-        setSuccessMessage('Account created successfully! Redirecting...');
+        setSuccessMessage('Account created successfully! Redirecting to your dashboard...');
         setTimeout(() => {
-          router.push('/');
+          if (role === 'Trainer') router.push('/dashboard/trainer');
+          else router.push('/dashboard');
           router.refresh();
-        }, 1500);
+        }, 1200);
       } else {
-        // Email confirmation is required
         setSuccessMessage(
-          'Registration successful! Please check your email to confirm your account before logging in.'
+          'Registration successful! Please check your email inbox to verify your account.'
         );
       }
     } catch (err) {
@@ -65,53 +64,82 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg bg-emerald-700 text-white font-bold flex items-center justify-center text-lg shadow-sm">
-            GS
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-slate-900">
-            GlobeSkill
-          </span>
-        </Link>
-        <h1 className="mt-6 text-3xl font-extrabold text-slate-900">
-          Create your account
-        </h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Join the community empowering underserved youth with digital and AI skills.
-        </p>
-      </div>
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 text-slate-100 relative overflow-hidden py-10 px-4 sm:px-6 lg:px-8">
+      {/* Ambient Radial Lights */}
+      <div className="absolute top-[-10%] right-[-10%] w-[550px] h-[550px] rounded-full bg-emerald-600/20 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-teal-500/10 blur-[160px] pointer-events-none" />
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl px-4 sm:px-0">
-        <div className="bg-white py-8 px-6 sm:px-10 shadow-sm rounded-2xl border border-slate-200">
+      {/* Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
+          backgroundSize: '32px 32px'
+        }}
+      />
+
+      <div className="w-full max-w-2xl relative z-10 mx-auto">
+        
+        {/* Header Branding */}
+        <div className="flex items-center justify-between mb-8 px-2">
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white font-black flex items-center justify-center text-xl shadow-lg shadow-emerald-900/30 group-hover:scale-105 transition-transform duration-200">
+              GS
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold tracking-tight text-white">GlobeSkill</span>
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  Join Free
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-medium">Empowering Underserved Youth with AI Skills</p>
+            </div>
+          </Link>
+
+          <Link
+            href="/login"
+            className="text-xs sm:text-sm font-medium text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5 border border-transparent hover:border-slate-800"
+          >
+            <span>Have an account?</span>
+            <span className="text-emerald-400 font-semibold">Sign In</span>
+          </Link>
+        </div>
+
+        {/* Signup Card */}
+        <div className="bg-slate-900/80 backdrop-blur-2xl border border-slate-800/80 rounded-3xl shadow-2xl p-8 sm:p-10">
+          
+          <div className="mb-6">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Create your account
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              Join thousands of learners and trainers on the open GlobeSkill platform.
+            </p>
+          </div>
+
+          {/* Error Message */}
           {errorMessage && (
             <div
               role="alert"
-              className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-start space-x-3"
+              className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-300 flex items-start gap-3"
             >
-              <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
+              <svg className="w-5 h-5 text-red-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
               <span>{errorMessage}</span>
             </div>
           )}
 
+          {/* Success Message */}
           {successMessage && (
             <div
               role="status"
-              className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-800 flex items-start space-x-3"
+              className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-sm text-emerald-300 flex items-start gap-3"
             >
-              <svg className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
+              <svg className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>{successMessage}</span>
             </div>
@@ -120,7 +148,7 @@ export default function SignUpPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full Name */}
             <div>
-              <label htmlFor="full-name" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="full-name" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                 Full Name
               </label>
               <input
@@ -130,14 +158,14 @@ export default function SignUpPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Maria Hernandez"
-                className="mt-1 block w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-colors sm:text-sm"
+                placeholder="e.g. Priya Sharma"
+                className="w-full px-4 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email-address" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="email-address" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                 Email Address
               </label>
               <input
@@ -149,41 +177,59 @@ export default function SignUpPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-1 block w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-colors sm:text-sm"
+                className="w-full px-4 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-                Password
+              <label htmlFor="password" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Create Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 6 characters"
-                className="mt-1 block w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-colors sm:text-sm"
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Minimum 6 characters"
+                  className="w-full pl-4 pr-11 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors"
+                >
+                  {showPassword ? (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Role Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Select Your Role in GlobeSkill
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2.5">
+                Choose Your Role
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Student */}
                 <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-xl border transition-all ${
+                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
                     role === 'Student'
-                      ? 'border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-600'
-                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                      ? 'border-emerald-500 bg-emerald-500/15 shadow-sm shadow-emerald-950 ring-1 ring-emerald-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
                   }`}
                 >
                   <input
@@ -194,18 +240,19 @@ export default function SignUpPage() {
                     onChange={() => setRole('Student')}
                     className="sr-only"
                   />
-                  <span className="font-semibold text-slate-900 text-sm">Student</span>
-                  <span className="text-xs text-slate-500 mt-1">
-                    Learn AI, tech skills &amp; earn certifications
+                  <span className="text-xl mb-1">🎓</span>
+                  <span className="font-semibold text-white text-sm">Student</span>
+                  <span className="text-xs text-slate-400 mt-0.5">
+                    Learn AI & earn free certifications
                   </span>
                 </label>
 
                 {/* Trainer */}
                 <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-xl border transition-all ${
+                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
                     role === 'Trainer'
-                      ? 'border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-600'
-                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                      ? 'border-blue-500 bg-blue-500/15 shadow-sm shadow-blue-950 ring-1 ring-blue-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
                   }`}
                 >
                   <input
@@ -216,18 +263,19 @@ export default function SignUpPage() {
                     onChange={() => setRole('Trainer')}
                     className="sr-only"
                   />
-                  <span className="font-semibold text-slate-900 text-sm">Trainer</span>
-                  <span className="text-xs text-slate-500 mt-1">
-                    Lead cohorts, mentor &amp; review projects
+                  <span className="text-xl mb-1">👨‍🏫</span>
+                  <span className="font-semibold text-white text-sm">Trainer</span>
+                  <span className="text-xs text-slate-400 mt-0.5">
+                    Teach cohorts & review submissions
                   </span>
                 </label>
 
                 {/* Volunteer */}
                 <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-xl border transition-all ${
+                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
                     role === 'Volunteer'
-                      ? 'border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-600'
-                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                      ? 'border-teal-500 bg-teal-500/15 shadow-sm shadow-teal-950 ring-1 ring-teal-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
                   }`}
                 >
                   <input
@@ -238,9 +286,10 @@ export default function SignUpPage() {
                     onChange={() => setRole('Volunteer')}
                     className="sr-only"
                   />
-                  <span className="font-semibold text-slate-900 text-sm">Volunteer</span>
-                  <span className="text-xs text-slate-500 mt-1">
-                    Support community events &amp; local chapters
+                  <span className="text-xl mb-1">🤝</span>
+                  <span className="font-semibold text-white text-sm">Volunteer</span>
+                  <span className="text-xs text-slate-400 mt-0.5">
+                    Support local skilling drives
                   </span>
                 </label>
               </div>
@@ -251,11 +300,11 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-emerald-700 hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 shadow-lg shadow-emerald-900/40 hover:shadow-emerald-900/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-[0.99] text-sm"
               >
                 {isLoading ? (
-                  <span className="flex items-center space-x-2">
-                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path
                         className="opacity-75"
@@ -263,22 +312,26 @@ export default function SignUpPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    <span>Creating account...</span>
-                  </span>
+                    <span>Creating Account...</span>
+                  </>
                 ) : (
-                  'Create GlobeSkill Account'
+                  <>
+                    <span>Create GlobeSkill Account</span>
+                    <span>&rarr;</span>
+                  </>
                 )}
               </button>
             </div>
           </form>
 
-          {/* Login Link */}
-          <div className="mt-6 text-center text-sm text-slate-600">
+          {/* Bottom Link */}
+          <div className="mt-6 pt-6 border-t border-slate-800/80 text-center text-sm text-slate-400">
             Already have an account?{' '}
-            <Link href="/login" className="font-semibold text-emerald-700 hover:text-emerald-800">
+            <Link href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
               Sign in here
             </Link>
           </div>
+
         </div>
       </div>
     </div>

@@ -151,7 +151,7 @@ BEGIN
     -- --------------------------------------------------------------------------
     UPDATE public.quiz_questions
     SET correct_option_id = 'a'
-    WHERE id = 'q0000000-0000-0000-0000-000000000011';
+    WHERE id = 'b0000000-0000-0000-0000-000000000011';
 
     GET DIAGNOSTICS v_affected_rows = ROW_COUNT;
 

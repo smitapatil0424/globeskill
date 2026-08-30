@@ -54,13 +54,13 @@ const MOCK_ASSESSMENT_CATALOG: Record<
     passingScore: 75,
     questions: [
       {
-        id: 'q0000000-0000-0000-0000-000000000001',
+        id: 'b0000000-0000-0000-0000-000000000001',
         points: 10,
         correct_option_id: 'b',
         explanation: 'useState() manages reactive component-level state and triggers UI updates.',
       },
       {
-        id: 'q0000000-0000-0000-0000-000000000002',
+        id: 'b0000000-0000-0000-0000-000000000002',
         points: 10,
         correct_option_id: 'c',
         explanation: 'PostgreSQL RLS isolates tenant rows based on auth.uid() at the engine layer.',
@@ -73,35 +73,35 @@ const MOCK_ASSESSMENT_CATALOG: Record<
     passingScore: 70,
     questions: [
       {
-        id: 'q0000000-0000-0000-0000-000000000011',
+        id: 'b0000000-0000-0000-0000-000000000011',
         points: 20,
         correct_option_id: 'b',
         explanation:
           'In traditional programming, developers hand-craft algorithmic logic. In Machine Learning, statistical models analyze data inputs and learn rules autonomously.',
       },
       {
-        id: 'q0000000-0000-0000-0000-000000000012',
+        id: 'b0000000-0000-0000-0000-000000000012',
         points: 20,
         correct_option_id: 'c',
         explanation:
           'Tokens are chunks of characters or words that AI models convert into numerical vectors (embeddings) to predict subsequent outputs.',
       },
       {
-        id: 'q0000000-0000-0000-0000-000000000013',
+        id: 'b0000000-0000-0000-0000-000000000013',
         points: 20,
         correct_option_id: 'b',
         explanation:
           'Providing role framing, constraints, and few-shot examples guides the model probability distribution toward high accuracy.',
       },
       {
-        id: 'q0000000-0000-0000-0000-000000000014',
+        id: 'b0000000-0000-0000-0000-000000000014',
         points: 20,
         correct_option_id: 'b',
         explanation:
           'Hallucinations occur when an LLM produces plausible-sounding but factually fabricated information due to probability text generation.',
       },
       {
-        id: 'q0000000-0000-0000-0000-000000000015',
+        id: 'b0000000-0000-0000-0000-000000000015',
         points: 20,
         correct_option_id: 'a',
         explanation:

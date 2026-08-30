@@ -371,7 +371,7 @@ INSERT INTO public.quiz_questions (
     order_index
 ) VALUES 
 (
-    'q0000000-0000-0000-0000-000000000001',
+    'b0000000-0000-0000-0000-000000000001',
     'a0000000-0000-0000-0000-000000000001',
     'Which React hook is designed for managing state transitions and holding component-level state?',
     '[{"id": "a", "text": "useEffect"}, {"id": "b", "text": "useState"}, {"id": "c", "text": "useMemo"}, {"id": "d", "text": "useContext"}]'::jsonb,
@@ -381,7 +381,7 @@ INSERT INTO public.quiz_questions (
     1
 ),
 (
-    'q0000000-0000-0000-0000-000000000002',
+    'b0000000-0000-0000-0000-000000000002',
     'a0000000-0000-0000-0000-000000000001',
     'What is the primary architectural purpose of PostgreSQL Row Level Security (RLS) in Supabase?',
     '[{"id": "a", "text": "Compiling TypeScript interfaces at build time"}, {"id": "b", "text": "Compressing media files stored in S3"}, {"id": "c", "text": "Enforcing fine-grained user data access policies directly at the database engine level"}, {"id": "d", "text": "Routing client requests between web workers"}]'::jsonb,

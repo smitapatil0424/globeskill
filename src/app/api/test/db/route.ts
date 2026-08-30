@@ -97,7 +97,7 @@ export async function GET() {
         exists: true,
         count: 15,
         sample: {
-          id: 'q0000000-0000-0000-0000-000000000001',
+          id: 'b0000000-0000-0000-0000-000000000001',
           question_text: 'Which React hook is designed for managing state transitions?',
           points: 10,
         },

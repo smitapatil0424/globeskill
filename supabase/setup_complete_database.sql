@@ -1595,7 +1595,7 @@ INSERT INTO public.quiz_questions (
     order_index
 ) VALUES 
 (
-    'q0000000-0000-0000-0000-000000000001',
+    'b0000000-0000-0000-0000-000000000001',
     'a0000000-0000-0000-0000-000000000001',
     'Which React hook is designed for managing state transitions and holding component-level state?',
     '[{"id": "a", "text": "useEffect"}, {"id": "b", "text": "useState"}, {"id": "c", "text": "useMemo"}, {"id": "d", "text": "useContext"}]'::jsonb,
@@ -1605,7 +1605,7 @@ INSERT INTO public.quiz_questions (
     1
 ),
 (
-    'q0000000-0000-0000-0000-000000000002',
+    'b0000000-0000-0000-0000-000000000002',
     'a0000000-0000-0000-0000-000000000001',
     'What is the primary architectural purpose of PostgreSQL Row Level Security (RLS) in Supabase?',
     '[{"id": "a", "text": "Compiling TypeScript interfaces at build time"}, {"id": "b", "text": "Compressing media files stored in S3"}, {"id": "c", "text": "Enforcing fine-grained user data access policies directly at the database engine level"}, {"id": "d", "text": "Routing client requests between web workers"}]'::jsonb,
@@ -1661,7 +1661,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000011',
+    'b0000000-0000-0000-0000-000000000011',
     'a0000000-0000-0000-0000-000000000002',
     'What is the core difference between traditional computer programming and Artificial Intelligence (Machine Learning)?',
     '[
@@ -1693,7 +1693,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000012',
+    'b0000000-0000-0000-0000-000000000012',
     'a0000000-0000-0000-0000-000000000002',
     'In generative AI and Large Language Models (LLMs), what is a "token"?',
     '[
@@ -1725,7 +1725,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000013',
+    'b0000000-0000-0000-0000-000000000013',
     'a0000000-0000-0000-0000-000000000002',
     'Which prompt engineering technique produces the most accurate and reliable answers from an AI assistant?',
     '[
@@ -1757,7 +1757,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000014',
+    'b0000000-0000-0000-0000-000000000014',
     'a0000000-0000-0000-0000-000000000002',
     'What does it mean when an Artificial Intelligence model "hallucinates"?',
     '[
@@ -1789,7 +1789,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000015',
+    'b0000000-0000-0000-0000-000000000015',
     'a0000000-0000-0000-0000-000000000002',
     'When using modern digital tools and AI applications, why is digital privacy and data security crucial?',
     '[
@@ -1832,11 +1832,11 @@ SELECT public.evaluate_and_save_attempt(
     'a0000000-0000-0000-0000-000000000002'::uuid,
     'd0000000-0000-0000-0000-000000000003'::uuid,
     '{
-        "q0000000-0000-0000-0000-000000000011": "b",
-        "q0000000-0000-0000-0000-000000000012": "c",
-        "q0000000-0000-0000-0000-000000000013": "b",
-        "q0000000-0000-0000-0000-000000000014": "b",
-        "q0000000-0000-0000-0000-000000000015": "a"
+        "b0000000-0000-0000-0000-000000000011": "b",
+        "b0000000-0000-0000-0000-000000000012": "c",
+        "b0000000-0000-0000-0000-000000000013": "b",
+        "b0000000-0000-0000-0000-000000000014": "b",
+        "b0000000-0000-0000-0000-000000000015": "a"
     }'::jsonb
 );
 */

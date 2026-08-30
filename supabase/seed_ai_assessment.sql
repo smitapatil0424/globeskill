@@ -52,7 +52,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000011',
+    'b0000000-0000-0000-0000-000000000011',
     'a0000000-0000-0000-0000-000000000002',
     'What is the core difference between traditional computer programming and Artificial Intelligence (Machine Learning)?',
     '[
@@ -84,7 +84,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000012',
+    'b0000000-0000-0000-0000-000000000012',
     'a0000000-0000-0000-0000-000000000002',
     'In generative AI and Large Language Models (LLMs), what is a "token"?',
     '[
@@ -116,7 +116,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000013',
+    'b0000000-0000-0000-0000-000000000013',
     'a0000000-0000-0000-0000-000000000002',
     'Which prompt engineering technique produces the most accurate and reliable answers from an AI assistant?',
     '[
@@ -148,7 +148,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000014',
+    'b0000000-0000-0000-0000-000000000014',
     'a0000000-0000-0000-0000-000000000002',
     'What does it mean when an Artificial Intelligence model "hallucinates"?',
     '[
@@ -180,7 +180,7 @@ INSERT INTO public.quiz_questions (
     points,
     order_index
 ) VALUES (
-    'q0000000-0000-0000-0000-000000000015',
+    'b0000000-0000-0000-0000-000000000015',
     'a0000000-0000-0000-0000-000000000002',
     'When using modern digital tools and AI applications, why is digital privacy and data security crucial?',
     '[
@@ -223,11 +223,11 @@ SELECT public.evaluate_and_save_attempt(
     'a0000000-0000-0000-0000-000000000002'::uuid,
     'd0000000-0000-0000-0000-000000000003'::uuid,
     '{
-        "q0000000-0000-0000-0000-000000000011": "b",
-        "q0000000-0000-0000-0000-000000000012": "c",
-        "q0000000-0000-0000-0000-000000000013": "b",
-        "q0000000-0000-0000-0000-000000000014": "b",
-        "q0000000-0000-0000-0000-000000000015": "a"
+        "b0000000-0000-0000-0000-000000000011": "b",
+        "b0000000-0000-0000-0000-000000000012": "c",
+        "b0000000-0000-0000-0000-000000000013": "b",
+        "b0000000-0000-0000-0000-000000000014": "b",
+        "b0000000-0000-0000-0000-000000000015": "a"
     }'::jsonb
 );
 */

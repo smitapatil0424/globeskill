@@ -7,7 +7,7 @@ import Link from 'next/link';
 // SEEDED QUIZ 1: Introduction to AI and Digital Skills
 const AI_DIGITAL_SKILLS_QUESTIONS: QuizEngineQuestion[] = [
   {
-    id: 'q0000000-0000-0000-0000-000000000011',
+    id: 'b0000000-0000-0000-0000-000000000011',
     question_text: 'What is the core difference between traditional computer programming and Artificial Intelligence (Machine Learning)?',
     options: [
       { id: 'a', text: 'Traditional programs learn by themselves from data, while AI requires humans to manually write every single IF/THEN rule.' },
@@ -20,7 +20,7 @@ const AI_DIGITAL_SKILLS_QUESTIONS: QuizEngineQuestion[] = [
     explanation: 'In traditional programming, developers hand-craft algorithmic logic. In Machine Learning, statistical models analyze data inputs and learn rules autonomously.',
   },
   {
-    id: 'q0000000-0000-0000-0000-000000000012',
+    id: 'b0000000-0000-0000-0000-000000000012',
     question_text: 'In generative AI and Large Language Models (LLMs), what is a "token"?',
     options: [
       { id: 'a', text: 'A physical plastic coin inserted into arcade machine slots.' },
@@ -33,7 +33,7 @@ const AI_DIGITAL_SKILLS_QUESTIONS: QuizEngineQuestion[] = [
     explanation: 'Tokens are the fundamental building blocks of text processed by LLMs. Words are split into numerical tokens that allow the neural network to compute mathematical embeddings and predict subsequent outputs.',
   },
   {
-    id: 'q0000000-0000-0000-0000-000000000013',
+    id: 'b0000000-0000-0000-0000-000000000013',
     question_text: 'Which prompt engineering technique produces the most accurate and reliable answers from an AI assistant?',
     options: [
       { id: 'a', text: 'Typing a single ambiguous word in ALL CAPS with zero background instructions.' },
@@ -46,7 +46,7 @@ const AI_DIGITAL_SKILLS_QUESTIONS: QuizEngineQuestion[] = [
     explanation: 'Giving models explicit role context, step-by-step reasoning constraints, and concrete few-shot examples drastically reduces ambiguity and primes the model for high-fidelity responses.',
   },
   {
-    id: 'q0000000-0000-0000-0000-000000000014',
+    id: 'b0000000-0000-0000-0000-000000000014',
     question_text: 'What does it mean when an Artificial Intelligence model "hallucinates"?',
     options: [
       { id: 'a', text: 'The computer monitor hardware begins glowing neon colors and overheating.' },
@@ -59,7 +59,7 @@ const AI_DIGITAL_SKILLS_QUESTIONS: QuizEngineQuestion[] = [
     explanation: 'Hallucinations happen because LLMs generate text based on statistical probability distributions rather than absolute truth retrieval. Developers must employ Grounding, RAG, and human verification to catch factual errors.',
   },
   {
-    id: 'q0000000-0000-0000-0000-000000000015',
+    id: 'b0000000-0000-0000-0000-000000000015',
     question_text: 'When using modern digital tools and AI applications, why is digital privacy and data security crucial?',
     options: [
       { id: 'a', text: 'Because sensitive personal data (passwords, health records, identity details) can be compromised, misused, or leaked if not safeguarded with encryption and access controls.' },

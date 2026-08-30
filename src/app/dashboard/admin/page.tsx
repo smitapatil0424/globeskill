@@ -1456,13 +1456,13 @@ export default function NGOAdminDashboardPage() {
                 )}
               </div>
 
-              {/* Modal Actions - Fully Separated, Styled Buttons */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              {/* Modal Actions - Separated Cancel on Left, Submit on Right */}
+              <div className="pt-5 border-t border-slate-100 flex items-center justify-between gap-4">
                 <button
                   type="button"
                   disabled={isSubmitting}
                   onClick={() => setIsNewProgramModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="px-5 py-2.5 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-95"
                 >
                   Cancel
                 </button>
@@ -1470,7 +1470,7 @@ export default function NGOAdminDashboardPage() {
                   id="submit-program-btn"
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50 active:scale-95"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50 active:scale-95 ml-auto"
                 >
                   {isSubmitting ? (
                     <>
@@ -1480,7 +1480,7 @@ export default function NGOAdminDashboardPage() {
                       <span>Creating Program...</span>
                     </>
                   ) : (
-                    <span>Create Training Program</span>
+                    <span>Create Training Program &rarr;</span>
                   )}
                 </button>
               </div>
@@ -1587,10 +1587,20 @@ export default function NGOAdminDashboardPage() {
       {toastMessage && (
         <div
           role="status"
-          className="fixed bottom-5 right-5 z-50 p-4 rounded-2xl bg-slate-900 text-white border border-indigo-500/60 shadow-2xl flex items-center space-x-3 max-w-md animate-slide-up"
+          className={`fixed bottom-5 right-5 z-50 p-4 rounded-2xl text-white shadow-2xl flex items-center gap-3 max-w-md animate-slide-up ${
+            toastMessage.toLowerCase().includes('failed') || toastMessage.toLowerCase().includes('error')
+              ? 'bg-red-950 border border-red-500/70 text-red-100'
+              : 'bg-slate-900 border border-emerald-500/60'
+          }`}
         >
-          <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-            ✓
+          <div
+            className={`w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-sm shrink-0 ${
+              toastMessage.toLowerCase().includes('failed') || toastMessage.toLowerCase().includes('error')
+                ? 'bg-red-600'
+                : 'bg-emerald-500'
+            }`}
+          >
+            {toastMessage.toLowerCase().includes('failed') || toastMessage.toLowerCase().includes('error') ? '✕' : '✓'}
           </div>
           <p className="text-xs sm:text-sm font-medium">{toastMessage}</p>
           <button

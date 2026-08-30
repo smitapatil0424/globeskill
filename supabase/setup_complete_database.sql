@@ -417,6 +417,40 @@ CREATE INDEX IF NOT EXISTS idx_student_attempts_assessment ON public.student_att
 CREATE INDEX IF NOT EXISTS idx_student_attempts_passed ON public.student_attempts(assessment_id, passed);
 
 -- ------------------------------------------------------------------------------
+-- 3.5 ADMINISTRATIVE & ROLE HELPER FUNCTIONS (MUST BE DEFINED BEFORE RLS POLICIES)
+-- ------------------------------------------------------------------------------
+-- A SECURITY DEFINER function bypasses RLS while checking admin status,
+-- preventing infinite recursion when querying public.profiles inside a policy.
+CREATE OR REPLACE FUNCTION public.is_ngo_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public, auth
+STABLE
+AS $$
+    SELECT EXISTS (
+        SELECT 1 FROM public.profiles
+        WHERE id = auth.uid() 
+          AND role = 'NGO Administrator'
+    );
+$$;
+
+-- Helper to check if user is a Trainer
+CREATE OR REPLACE FUNCTION public.is_trainer()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public, auth
+STABLE
+AS $$
+    SELECT EXISTS (
+        SELECT 1 FROM public.profiles
+        WHERE id = auth.uid() 
+          AND role = 'Trainer'
+    );
+$$;
+
+-- ------------------------------------------------------------------------------
 -- 4. ROW LEVEL SECURITY (RLS) ACTIVATION
 -- ------------------------------------------------------------------------------
 ALTER TABLE public.assessments ENABLE ROW LEVEL SECURITY;

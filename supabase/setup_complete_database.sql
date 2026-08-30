@@ -710,62 +710,6 @@ BEGIN
 END;
 $$;
 
--- ------------------------------------------------------------------------------
--- 9. SAMPLE SEED DATA FOR DEMO & TESTING
--- ------------------------------------------------------------------------------
--- Sample Assessment for IBM SkillsBuild Frontend (c0000000-0000-0000-0000-000000000001)
-INSERT INTO public.assessments (
-    id,
-    project_id,
-    title,
-    description,
-    passing_score,
-    duration_minutes,
-    max_attempts,
-    is_published
-) VALUES (
-    'a0000000-0000-0000-0000-000000000001',
-    'c0000000-0000-0000-0000-000000000001',
-    'Frontend Web Development Certification Milestone Quiz',
-    'Assess your foundational mastery of semantic HTML5, modern Tailwind CSS, and React 19 state management.',
-    75,
-    30,
-    3,
-    true
-) ON CONFLICT (id) DO NOTHING;
-
--- Sample Questions for Assessment 1
-INSERT INTO public.quiz_questions (
-    id,
-    assessment_id,
-    question_text,
-    options,
-    correct_option_id,
-    explanation,
-    points,
-    order_index
-) VALUES 
-(
-    'q0000000-0000-0000-0000-000000000001',
-    'a0000000-0000-0000-0000-000000000001',
-    'Which React hook is designed for managing state transitions and holding component-level state?',
-    '[{"id": "a", "text": "useEffect"}, {"id": "b", "text": "useState"}, {"id": "c", "text": "useMemo"}, {"id": "d", "text": "useContext"}]'::jsonb,
-    'b',
-    'useState declares a state variable that you can update directly across re-renders.',
-    10,
-    1
-),
-(
-    'q0000000-0000-0000-0000-000000000002',
-    'a0000000-0000-0000-0000-000000000001',
-    'What is the primary architectural purpose of PostgreSQL Row Level Security (RLS) in Supabase?',
-    '[{"id": "a", "text": "Compiling TypeScript interfaces at build time"}, {"id": "b", "text": "Compressing media files stored in S3"}, {"id": "c", "text": "Enforcing fine-grained user data access policies directly at the database engine level"}, {"id": "d", "text": "Routing client requests between web workers"}]'::jsonb,
-    'c',
-    'RLS filters and checks rows per user context (auth.uid()) inside the database engine, providing security in depth.',
-    10,
-    2
-) ON CONFLICT (id) DO NOTHING;
-
 
 -- ==========================================
 -- FILE: rls_policies.sql
@@ -1616,6 +1560,60 @@ ON CONFLICT (id) DO UPDATE SET
 -- Assessment: a0000000-0000-0000-0000-000000000002
 -- Total Questions: 5 | Total Points: 100 (20 pts each) | Passing Score: 70%
 -- ==============================================================================
+
+-- ------------------------------------------------------------------------------
+-- 0. SEED SAMPLE ASSESSMENT 1: FRONTEND WEB DEVELOPMENT
+-- ------------------------------------------------------------------------------
+INSERT INTO public.assessments (
+    id,
+    project_id,
+    title,
+    description,
+    passing_score,
+    duration_minutes,
+    max_attempts,
+    is_published
+) VALUES (
+    'a0000000-0000-0000-0000-000000000001',
+    'c0000000-0000-0000-0000-000000000001',
+    'Frontend Web Development Certification Milestone Quiz',
+    'Assess your foundational mastery of semantic HTML5, modern Tailwind CSS, and React 19 state management.',
+    75,
+    30,
+    3,
+    true
+) ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.quiz_questions (
+    id,
+    assessment_id,
+    question_text,
+    options,
+    correct_option_id,
+    explanation,
+    points,
+    order_index
+) VALUES 
+(
+    'q0000000-0000-0000-0000-000000000001',
+    'a0000000-0000-0000-0000-000000000001',
+    'Which React hook is designed for managing state transitions and holding component-level state?',
+    '[{"id": "a", "text": "useEffect"}, {"id": "b", "text": "useState"}, {"id": "c", "text": "useMemo"}, {"id": "d", "text": "useContext"}]'::jsonb,
+    'b',
+    'useState declares a state variable that you can update directly across re-renders.',
+    10,
+    1
+),
+(
+    'q0000000-0000-0000-0000-000000000002',
+    'a0000000-0000-0000-0000-000000000001',
+    'What is the primary architectural purpose of PostgreSQL Row Level Security (RLS) in Supabase?',
+    '[{"id": "a", "text": "Compiling TypeScript interfaces at build time"}, {"id": "b", "text": "Compressing media files stored in S3"}, {"id": "c", "text": "Enforcing fine-grained user data access policies directly at the database engine level"}, {"id": "d", "text": "Routing client requests between web workers"}]'::jsonb,
+    'c',
+    'RLS filters and checks rows per user context (auth.uid()) inside the database engine, providing security in depth.',
+    10,
+    2
+) ON CONFLICT (id) DO NOTHING;
 
 -- ------------------------------------------------------------------------------
 -- 1. INSERT ASSESSMENT METADATA

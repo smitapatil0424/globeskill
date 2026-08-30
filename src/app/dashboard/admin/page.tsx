@@ -1191,65 +1191,66 @@ export default function NGOAdminDashboardPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto"
         >
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 animate-scale-up">
-            <div className="flex items-start justify-between">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 my-8 animate-scale-up">
+            <div className="flex items-start justify-between border-b border-slate-100 pb-4">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Enrolment Audit Log
                 </span>
-                <h3 className="text-xl font-bold text-slate-900 mt-2">
+                <h3 className="text-xl font-bold text-slate-900 mt-2.5">
                   {selectedStudentModal.studentName}
                 </h3>
-                <p className="text-xs text-slate-500">{selectedStudentModal.studentEmail}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{selectedStudentModal.studentEmail}</p>
               </div>
               <button
                 onClick={() => setSelectedStudentModal(null)}
-                className="text-slate-400 hover:text-slate-600 text-lg font-bold p-1 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-base font-bold transition-colors cursor-pointer"
               >
                 &times;
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-400 block font-medium">Enrolled Course</span>
-                <strong className="text-slate-900 block mt-0.5 text-xs">{selectedStudentModal.courseTitle}</strong>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-6 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Enrolled Course</span>
+                <strong className="text-slate-900 block mt-1 text-sm font-bold">{selectedStudentModal.courseTitle}</strong>
               </div>
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-400 block font-medium">Accredited Partner</span>
-                <strong className="text-slate-900 block mt-0.5 text-xs">{selectedStudentModal.partner}</strong>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Accredited Partner</span>
+                <strong className="text-slate-900 block mt-1 text-sm font-bold">{selectedStudentModal.partner}</strong>
               </div>
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-400 block font-medium">Assigned Mentor</span>
-                <strong className="text-slate-900 block mt-0.5 text-xs">{selectedStudentModal.trainerName}</strong>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Assigned Mentor</span>
+                <strong className="text-slate-900 block mt-1 text-sm font-bold">{selectedStudentModal.trainerName}</strong>
               </div>
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-400 block font-medium">Current Progress</span>
-                <strong className="text-slate-900 block mt-0.5 text-xs">{selectedStudentModal.progress}% ({selectedStudentModal.status})</strong>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Current Progress</span>
+                <strong className="text-slate-900 block mt-1 text-sm font-bold">{selectedStudentModal.progress}% ({selectedStudentModal.status})</strong>
               </div>
             </div>
 
             {selectedStudentModal.certificateUrl && (
-              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs">
-                <span className="text-emerald-800 font-bold block">✓ Verified Credential Issued</span>
+              <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs">
+                <span className="text-emerald-800 font-bold block text-sm">✓ Verified Credential Issued</span>
                 <a
                   href={selectedStudentModal.certificateUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-emerald-700 underline text-[11px] mt-1 block truncate"
+                  className="text-emerald-700 underline text-xs mt-1 block truncate font-medium"
                 >
                   {selectedStudentModal.certificateUrl}
                 </a>
               </div>
             )}
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-4 border-t border-slate-100 flex justify-end">
               <button
                 type="button"
                 onClick={() => setSelectedStudentModal(null)}
-                className="px-5 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 cursor-pointer"
+                className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all cursor-pointer active:scale-95"
               >
                 Close Audit
               </button>
@@ -1259,40 +1260,41 @@ export default function NGOAdminDashboardPage() {
       )}
 
       {/* ======================================================================= */}
-      {/* 6. ADD NEW TRAINING PROGRAM MODAL (TAILWIND CSS FORM WITH VALIDATION) */}
+      {/* 6. ADD NEW TRAINING PROGRAM MODAL (PREMIUM SPACIOUS ENTERPRISE FORM) */}
       {/* ======================================================================= */}
       {isNewProgramModalOpen && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto"
         >
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 my-8 animate-scale-up">
-            <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 my-8 animate-scale-up">
+            <div className="flex items-start justify-between border-b border-slate-100 pb-5">
               <div>
-                <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   <span>Curriculum Management</span>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mt-2">
+                <h3 className="text-2xl font-extrabold text-slate-900 mt-2.5 tracking-tight">
                   Create New Training Program
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 mt-1">
                   Configure a new technology skilling track, assign an accredited partner, and allocate cohort mentors.
                 </p>
               </div>
               <button
                 onClick={() => setIsNewProgramModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-lg font-bold p-1 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-lg font-bold transition-colors cursor-pointer"
               >
                 &times;
               </button>
             </div>
 
-            <form onSubmit={handleCreateProgram} className="space-y-4 text-xs sm:text-sm">
+            <form onSubmit={handleCreateProgram} className="space-y-4 pt-5 text-xs sm:text-sm">
               {/* Row 1: Title & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="program-title" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-title" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Program Title <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1305,7 +1307,7 @@ export default function NGOAdminDashboardPage() {
                       if (formErrors.title) setFormErrors({ ...formErrors, title: '' });
                     }}
                     placeholder="e.g. Full-Stack Web Development with React"
-                    className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs ${
+                    className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs ${
                       formErrors.title ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300'
                     }`}
                   />
@@ -1315,14 +1317,14 @@ export default function NGOAdminDashboardPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="program-category" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-category" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Track Category <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="program-category"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs cursor-pointer"
                   >
                     <option value="Web Development">Web Development</option>
                     <option value="Artificial Intelligence">Artificial Intelligence & ML</option>
@@ -1336,7 +1338,7 @@ export default function NGOAdminDashboardPage() {
               {/* Row 2: Partner & Duration */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="program-partner" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-partner" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Accredited Partner
                   </label>
                   <input
@@ -1344,13 +1346,13 @@ export default function NGOAdminDashboardPage() {
                     type="text"
                     value={formData.partner_organization}
                     onChange={(e) => setFormData({ ...formData, partner_organization: e.target.value })}
-                    placeholder="e.g. IBM SkillsBuild, Google"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs"
+                    placeholder="e.g. IBM SkillsBuild, Google, Infosys"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="program-duration" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-duration" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Duration (in Weeks) <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1364,7 +1366,7 @@ export default function NGOAdminDashboardPage() {
                       setFormData({ ...formData, duration_weeks: Number(e.target.value) });
                       if (formErrors.duration_weeks) setFormErrors({ ...formErrors, duration_weeks: '' });
                     }}
-                    className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs ${
+                    className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs ${
                       formErrors.duration_weeks ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300'
                     }`}
                   />
@@ -1377,7 +1379,7 @@ export default function NGOAdminDashboardPage() {
               {/* Row 3: Difficulty, Capacity & Status */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="program-difficulty" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-difficulty" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Difficulty Level
                   </label>
                   <select
@@ -1389,7 +1391,7 @@ export default function NGOAdminDashboardPage() {
                         difficulty_level: e.target.value as 'Beginner' | 'Intermediate' | 'Advanced',
                       })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs cursor-pointer"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
@@ -1398,7 +1400,7 @@ export default function NGOAdminDashboardPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="program-capacity" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-capacity" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Max Student Capacity
                   </label>
                   <input
@@ -1408,12 +1410,12 @@ export default function NGOAdminDashboardPage() {
                     max="500"
                     value={formData.max_capacity}
                     onChange={(e) => setFormData({ ...formData, max_capacity: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="program-status" className="block font-semibold text-slate-700 mb-1">
+                  <label htmlFor="program-status" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Initial Status
                   </label>
                   <select
@@ -1422,7 +1424,7 @@ export default function NGOAdminDashboardPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value as 'active' | 'draft' })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs cursor-pointer"
                   >
                     <option value="active">Active (Open for Enrolment)</option>
                     <option value="draft">Draft (Planning)</option>
@@ -1432,7 +1434,7 @@ export default function NGOAdminDashboardPage() {
 
               {/* Row 4: Description */}
               <div>
-                <label htmlFor="program-description" className="block font-semibold text-slate-700 mb-1">
+                <label htmlFor="program-description" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                   Program Description & Objectives <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -1445,7 +1447,7 @@ export default function NGOAdminDashboardPage() {
                     if (formErrors.description) setFormErrors({ ...formErrors, description: '' });
                   }}
                   placeholder="Outline the curriculum prerequisites, learning modules, and career skills..."
-                  className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-colors text-xs ${
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-slate-900 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all text-xs sm:text-sm shadow-xs resize-none ${
                     formErrors.description ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300'
                   }`}
                 />
@@ -1454,13 +1456,13 @@ export default function NGOAdminDashboardPage() {
                 )}
               </div>
 
-              {/* Modal Actions */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-end space-x-3">
+              {/* Modal Actions - Fully Separated, Styled Buttons */}
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   disabled={isSubmitting}
                   onClick={() => setIsNewProgramModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-95"
                 >
                   Cancel
                 </button>
@@ -1468,11 +1470,11 @@ export default function NGOAdminDashboardPage() {
                   id="submit-program-btn"
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/30 transition-all cursor-pointer flex items-center space-x-2 disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-900/20 hover:shadow-emerald-900/30 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50 active:scale-95"
                 >
                   {isSubmitting ? (
                     <>
-                      <svg className="w-3.5 h-3.5 animate-spin text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
                       <span>Creating Program...</span>

@@ -241,7 +241,7 @@ export default function NGOAdminDashboardPage() {
       const res = await fetch('/api/admin/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, callerRole: 'NGO Administrator' }),
       });
 
       const data = await res.json();

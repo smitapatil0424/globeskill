@@ -92,17 +92,17 @@ export default function LoginPage() {
         {/* Top Navbar Header */}
         <div className="flex items-center justify-between mb-8 px-2">
           <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white font-black flex items-center justify-center text-xl shadow-lg shadow-emerald-900/30 group-hover:scale-105 transition-transform duration-200">
-              GS
+            <div className="w-10 h-10 rounded-xl bg-[#059669] text-white font-extrabold flex items-center justify-center text-xl shadow-md group-hover:bg-[#047857] transition-all">
+              G
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold tracking-tight text-white">GlobeSkill</span>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  NGO Portal
+                <span className="text-xl font-bold tracking-tight text-white">GlobeSkill</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0] uppercase tracking-wide">
+                  AI &amp; TECH EDUCATION
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-medium">Technology & AI Skilling Initiative</p>
+              <p className="text-[11px] text-slate-400 font-medium">Glob TechPower Foundation</p>
             </div>
           </Link>
 

@@ -60,11 +60,25 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (err) {
-      setErrorMessage(
-        err instanceof Error
-          ? err.message
-          : 'Invalid login credentials. Please check your email and password.'
-      );
+      const msg = err instanceof Error ? err.message : 'Invalid login credentials.';
+      if (msg.toLowerCase().includes('email not confirmed')) {
+        setErrorMessage(
+          'Email not confirmed yet! Supabase requires email verification. We have triggered a fresh confirmation email, or you can click the link sent to your inbox.'
+        );
+        try {
+          await supabase.auth.resend({
+            type: 'signup',
+            email: email.trim(),
+            options: {
+              emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
+            },
+          });
+        } catch {
+          // ignore
+        }
+      } else {
+        setErrorMessage(msg);
+      }
     } finally {
       setIsLoading(false);
     }

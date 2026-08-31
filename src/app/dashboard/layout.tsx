@@ -321,9 +321,24 @@ export default function DashboardLayout({
       try {
         const { data } = await supabase.auth.getUser();
         if (data?.user) {
-          const role = (data.user.user_metadata?.role as UserRole) || 'Student';
+          let role = (data.user.user_metadata?.role as UserRole) || 'Student';
+          let name = data.user.user_metadata?.full_name;
+
+          // Fetch from public.profiles table if metadata not fully populated
+          if (!name || !role) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('full_name, role')
+              .eq('id', data.user.id)
+              .single();
+            if (profile) {
+              if (profile.role) role = profile.role as UserRole;
+              if (profile.full_name) name = profile.full_name;
+            }
+          }
+
           setCurrentRole(role);
-          setUserName(data.user.user_metadata?.full_name || 'GlobeSkill Member');
+          setUserName(name || 'GlobeSkill Member');
           setUserEmail(data.user.email || '');
           return;
         }

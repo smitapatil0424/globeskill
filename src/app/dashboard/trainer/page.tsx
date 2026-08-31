@@ -140,7 +140,16 @@ export default function TrainerDashboardPage() {
         const user = authData?.user;
 
         if (user && isMounted) {
-          setTrainerName(user.user_metadata?.full_name || 'Dr. Aris Thorne');
+          let name = user.user_metadata?.full_name;
+          if (!name) {
+            const { data: prof } = await supabase
+              .from('profiles')
+              .select('full_name')
+              .eq('id', user.id)
+              .single();
+            if (prof?.full_name) name = prof.full_name;
+          }
+          setTrainerName(name || 'Trainer');
 
           // Query live enrolments for courses assigned to this trainer
           const { data: dbData } = await supabase

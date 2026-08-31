@@ -50,10 +50,10 @@ export default function Hero() {
           <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
             
             {/* Tagline Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 border border-blue-200/80 shadow-xs text-xs sm:text-sm font-semibold text-blue-900">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 shadow-xs text-xs sm:text-sm font-semibold text-emerald-900">
               <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#059669]"></span>
               </span>
               <span>Bridging the Digital Divide &bull; Empowering Youth</span>
             </div>
@@ -62,7 +62,7 @@ export default function Hero() {
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-950 leading-[1.12]">
                 Empowering Communities &amp; Youth Through{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-600 to-sky-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#059669] via-emerald-600 to-teal-500">
                   Future-Ready Technology
                 </span>
               </h1>
@@ -75,7 +75,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <Link
                 href="/signup"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-150"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-[#059669] hover:bg-[#047857] active:bg-[#065f46] shadow-md hover:shadow-lg hover:shadow-emerald-600/25 transition-all duration-150"
               >
                 <span>Explore Programs</span>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

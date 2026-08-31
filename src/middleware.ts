@@ -75,6 +75,8 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = pathname === '/login' || pathname === '/signup';
   const isProtectedRoute = isAdminRoute || pathname.startsWith('/dashboard') || pathname.startsWith('/profile');
 
+  const isTrainerRoute = pathname.startsWith('/dashboard/trainer');
+
   // Rule 1: Not logged in & requesting a protected route -> Redirect to /login
   if (isProtectedRoute && !user) {
     const loginUrl = new URL('/login', request.url);
@@ -82,7 +84,27 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Rule 2: Logged in & requesting /admin -> Enforce 'NGO Administrator' Role
+  // Rule 2A: Trainer Route Guard -> Only 'Trainer' or 'NGO Administrator' allowed
+  if (isTrainerRoute && user) {
+    let role = user.user_metadata?.role;
+    if (!role) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      role = profile?.role;
+    }
+
+    if (role !== 'Trainer' && role !== 'NGO Administrator') {
+      const unauthUrl = new URL('/unauthorized', request.url);
+      unauthUrl.searchParams.set('hub', 'Trainer Management Hub');
+      unauthUrl.searchParams.set('required', 'trainer, admin');
+      return NextResponse.redirect(unauthUrl);
+    }
+  }
+
+  // Rule 2B: Logged in & requesting /admin -> Enforce 'NGO Administrator' Role
   if (isAdminRoute && user) {
     let role = user.user_metadata?.role;
 
@@ -97,8 +119,11 @@ export async function middleware(request: NextRequest) {
     }
 
     if (role !== 'NGO Administrator') {
-      // Forbidden access: Redirect to unauthorized page
-      return NextResponse.redirect(new URL('/unauthorized', request.url));
+      // Forbidden access: Redirect to unauthorized page with context
+      const unauthUrl = new URL('/unauthorized', request.url);
+      unauthUrl.searchParams.set('hub', 'NGO Admin Command Center');
+      unauthUrl.searchParams.set('required', 'admin');
+      return NextResponse.redirect(unauthUrl);
     }
   }
 

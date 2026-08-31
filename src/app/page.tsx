@@ -7,9 +7,11 @@ import CommunityStories from '@/components/home/CommunityStories';
 import CTABanner from '@/components/home/CTABanner';
 import Footer from '@/components/home/Footer';
 
+import AIChat from '@/components/AIChat';
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900 flex flex-col">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-emerald-100 selection:text-emerald-900 flex flex-col">
       {/* 1. Header Navigation Bar */}
       <Navbar />
 
@@ -36,6 +38,9 @@ export default function Home() {
 
       {/* 3. Comprehensive Foundation Footer */}
       <Footer />
+
+      {/* 4. Floating Ask AI Mentor launcher */}
+      <AIChat courseContext="GlobeSkill Platform & AI Skilling" />
     </div>
   );
 }

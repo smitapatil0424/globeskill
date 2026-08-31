@@ -162,12 +162,12 @@ export default function AIChat({ courseContext = 'Frontend & AI Skilling Track' 
           id="open-ai-chat-btn"
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-2xl shadow-indigo-600/40 border border-white/20 flex items-center space-x-2 transition-all duration-200 transform hover:scale-105 cursor-pointer animate-fade-in"
-          aria-label="Open GlobeSkill AI Assistant"
+          className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-full bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs shadow-xl border border-white/20 flex items-center space-x-2 transition-all duration-200 transform hover:scale-105 cursor-pointer animate-fade-in"
+          aria-label="Open GlobeSkill Ask AI Mentor"
         >
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <span className="text-base">✨</span>
-          <span>Ask GlobeSkill AI</span>
+          <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
+          <span className="text-sm">🤖</span>
+          <span className="tracking-wide">Ask AI Mentor</span>
         </button>
       )}
 

@@ -298,6 +298,8 @@ function clearMockCookie() {
   }
 }
 
+import AIChat from '@/components/AIChat';
+
 export default function DashboardLayout({
   children,
 }: {
@@ -432,15 +434,15 @@ export default function DashboardLayout({
         <div className="p-5 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-sm group-hover:scale-105 transition-transform">
-                GS
+              <div className="w-10 h-10 rounded-xl bg-[#059669] text-white font-extrabold flex items-center justify-center text-xl shadow-sm group-hover:bg-[#047857] transition-all">
+                G
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-lg text-slate-900 tracking-tight leading-none">
                   GlobeSkill
                 </span>
-                <span className="text-[11px] font-semibold text-emerald-700 tracking-wide mt-1">
-                  Youth Tech Platform
+                <span className="text-[10px] font-bold text-[#059669] tracking-wider uppercase mt-1">
+                  AI &amp; Tech Education
                 </span>
               </div>
             </Link>
@@ -624,6 +626,9 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Floating Ask AI Mentor Widget */}
+      <AIChat courseContext={`${currentRole} Hub & Learning Skilling`} />
     </div>
   );
 }

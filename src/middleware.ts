@@ -51,21 +51,17 @@ export async function middleware(request: NextRequest) {
     user = null;
   }
 
-  // Support seamless local development testing when Supabase keys are in mock mode
-  const isMockDev = !supabaseUrl || supabaseUrl.includes('placeholder') || supabaseUrl.includes('your-project-id');
-  if (!user && isMockDev) {
-    const mockRole = request.cookies.get('mock_role')?.value;
-    const defaultRole = request.nextUrl.pathname.startsWith('/dashboard/admin') ? 'NGO Administrator' : 'Student';
-    if (mockRole || request.nextUrl.pathname.startsWith('/dashboard')) {
-      user = {
-        id: 'mock-user-uuid',
-        email: 'alex.rivera@globeskill.org',
-        user_metadata: {
-          full_name: 'Alex Rivera',
-          role: mockRole || defaultRole,
-        },
-      } as unknown as typeof user;
-    }
+  // Support demo role testing via mock_role cookie if not actively logged in with Supabase JWT
+  const mockRole = request.cookies.get('mock_role')?.value;
+  if (!user && mockRole) {
+    user = {
+      id: 'mock-demo-user-uuid',
+      email: `${mockRole.toLowerCase().replace(/\s+/g, '')}@globeskill.org`,
+      user_metadata: {
+        full_name: `Demo ${mockRole}`,
+        role: mockRole,
+      },
+    } as unknown as typeof user;
   }
 
   const { pathname } = request.nextUrl;

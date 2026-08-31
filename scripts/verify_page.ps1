@@ -1,4 +1,4 @@
-$res = Invoke-WebRequest -Uri 'http://localhost:3005/unauthorized' -UseBasicParsing
+$res = Invoke-WebRequest -Uri 'http://localhost:3000/' -UseBasicParsing
 $html = $res.Content
 Write-Host "Status Code: " $res.StatusCode
 Write-Host "HTML Length: " $html.Length

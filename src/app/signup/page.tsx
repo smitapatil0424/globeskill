@@ -14,7 +14,8 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState<'Student' | 'Trainer' | 'Volunteer'>('Student');
+  const [role, setRole] = useState<'Student' | 'Trainer' | 'Volunteer'>('Trainer');
+  const [organization, setOrganization] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -26,6 +27,7 @@ export default function SignUpPage() {
     setSuccessMessage(null);
 
     try {
+      // 1. Register with Supabase Auth
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
@@ -33,6 +35,7 @@ export default function SignUpPage() {
           data: {
             full_name: fullName.trim(),
             role: role as UserRole,
+            organization: organization.trim() || 'GlobeSkill Foundation',
           },
           emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
         },
@@ -42,17 +45,27 @@ export default function SignUpPage() {
         throw error;
       }
 
+      // 2. Set mock_role cookie as immediate fallback for seamless navigation
+      const mockValue = role === 'Trainer' ? 'Trainer' : role === 'Volunteer' ? 'Volunteer' : 'Student';
+      if (typeof document !== 'undefined') {
+        document.cookie = `mock_role=${encodeURIComponent(mockValue)}; path=/; max-age=86400`;
+      }
+
       if (data.session) {
-        setSuccessMessage('Account created successfully! Redirecting to your dashboard...');
+        setSuccessMessage(`Account created successfully as ${role}! Redirecting...`);
         setTimeout(() => {
           if (role === 'Trainer') router.push('/dashboard/trainer');
           else router.push('/dashboard');
           router.refresh();
-        }, 1200);
+        }, 1000);
       } else {
         setSuccessMessage(
           'Registration successful! Please check your email inbox to verify your account.'
         );
+        setTimeout(() => {
+          if (role === 'Trainer') router.push('/dashboard/trainer');
+          else router.push('/dashboard');
+        }, 2000);
       }
     } catch (err) {
       setErrorMessage(
@@ -64,7 +77,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 text-slate-100 relative overflow-hidden py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 text-slate-100 relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
       {/* Ambient Radial Lights */}
       <div className="absolute top-[-10%] right-[-10%] w-[550px] h-[550px] rounded-full bg-emerald-600/20 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[140px] pointer-events-none" />
@@ -79,9 +92,9 @@ export default function SignUpPage() {
         }}
       />
 
-      <div className="w-full max-w-2xl relative z-10 mx-auto">
+      <div className="w-full max-w-xl relative z-10 mx-auto">
         
-        {/* Header Branding */}
+        {/* Header Branding with Emerald G and AI & TECH EDUCATION badge */}
         <div className="flex items-center justify-between mb-8 px-2">
           <Link href="/" className="inline-flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-[#059669] text-white font-extrabold flex items-center justify-center text-xl shadow-md group-hover:bg-[#047857] transition-all">
@@ -108,14 +121,14 @@ export default function SignUpPage() {
         </div>
 
         {/* Signup Card */}
-        <div className="bg-slate-900/80 backdrop-blur-2xl border border-slate-800/80 rounded-3xl shadow-2xl p-8 sm:p-10">
+        <div className="bg-slate-900/90 backdrop-blur-2xl border border-slate-800 rounded-3xl shadow-2xl p-8 sm:p-10">
           
           <div className="mb-6">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Create your account
-            </h2>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Create Your Account
+            </h1>
             <p className="mt-2 text-sm text-slate-400">
-              Join thousands of learners and trainers on the open GlobeSkill platform.
+              Register as a Student, Trainer, or Volunteer to access the GlobeSkill workspace.
             </p>
           </div>
 
@@ -146,6 +159,60 @@ export default function SignUpPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            
+            {/* Role Selection Tabs */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2.5">
+                Choose Account Role
+              </label>
+              <div className="grid grid-cols-3 gap-2.5">
+                {/* Trainer Card */}
+                <button
+                  type="button"
+                  onClick={() => setRole('Trainer')}
+                  className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    role === 'Trainer'
+                      ? 'border-blue-500 bg-blue-500/15 shadow-sm shadow-blue-950 ring-1 ring-blue-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <span className="text-2xl mb-1">👨‍🏫</span>
+                  <span className="font-bold text-white text-xs">Trainer</span>
+                  <span className="text-[10px] text-blue-300 mt-0.5">Teach &amp; Mentor</span>
+                </button>
+
+                {/* Student Card */}
+                <button
+                  type="button"
+                  onClick={() => setRole('Student')}
+                  className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    role === 'Student'
+                      ? 'border-emerald-500 bg-emerald-500/15 shadow-sm shadow-emerald-950 ring-1 ring-emerald-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <span className="text-2xl mb-1">🎓</span>
+                  <span className="font-bold text-white text-xs">Student</span>
+                  <span className="text-[10px] text-emerald-300 mt-0.5">Learn AI Skills</span>
+                </button>
+
+                {/* Volunteer Card */}
+                <button
+                  type="button"
+                  onClick={() => setRole('Volunteer')}
+                  className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    role === 'Volunteer'
+                      ? 'border-teal-500 bg-teal-500/15 shadow-sm shadow-teal-950 ring-1 ring-teal-500'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <span className="text-2xl mb-1">🤝</span>
+                  <span className="font-bold text-white text-xs">Volunteer</span>
+                  <span className="text-[10px] text-teal-300 mt-0.5">Community Drive</span>
+                </button>
+              </div>
+            </div>
+
             {/* Full Name */}
             <div>
               <label htmlFor="full-name" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
@@ -158,7 +225,7 @@ export default function SignUpPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Priya Sharma"
+                placeholder={role === 'Trainer' ? 'e.g. Dr. Rajesh Sharma' : 'e.g. Priya Patel'}
                 className="w-full px-4 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
               />
             </div>
@@ -176,7 +243,23 @@ export default function SignUpPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={role === 'Trainer' ? 'trainer@globeskill.org' : 'student@example.com'}
+                className="w-full px-4 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
+              />
+            </div>
+
+            {/* Organization / Institute */}
+            <div>
+              <label htmlFor="organization" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Institute / Organization <span className="text-slate-500 text-[11px] lowercase">(optional)</span>
+              </label>
+              <input
+                id="organization"
+                name="organization"
+                type="text"
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                placeholder="e.g. Glob TechPower Foundation / IBM SkillsBuild"
                 className="w-full px-4 py-3 bg-slate-950/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-sm shadow-inner"
               />
             </div>
@@ -202,7 +285,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
                 >
                   {showPassword ? (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -218,89 +301,12 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Role Selection */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2.5">
-                Choose Your Role
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {/* Student */}
-                <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
-                    role === 'Student'
-                      ? 'border-emerald-500 bg-emerald-500/15 shadow-sm shadow-emerald-950 ring-1 ring-emerald-500'
-                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Student"
-                    checked={role === 'Student'}
-                    onChange={() => setRole('Student')}
-                    className="sr-only"
-                  />
-                  <span className="text-xl mb-1">🎓</span>
-                  <span className="font-semibold text-white text-sm">Student</span>
-                  <span className="text-xs text-slate-400 mt-0.5">
-                    Learn AI & earn free certifications
-                  </span>
-                </label>
-
-                {/* Trainer */}
-                <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
-                    role === 'Trainer'
-                      ? 'border-blue-500 bg-blue-500/15 shadow-sm shadow-blue-950 ring-1 ring-blue-500'
-                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Trainer"
-                    checked={role === 'Trainer'}
-                    onChange={() => setRole('Trainer')}
-                    className="sr-only"
-                  />
-                  <span className="text-xl mb-1">👨‍🏫</span>
-                  <span className="font-semibold text-white text-sm">Trainer</span>
-                  <span className="text-xs text-slate-400 mt-0.5">
-                    Teach cohorts & review submissions
-                  </span>
-                </label>
-
-                {/* Volunteer */}
-                <label
-                  className={`relative flex flex-col p-4 cursor-pointer rounded-2xl border transition-all ${
-                    role === 'Volunteer'
-                      ? 'border-teal-500 bg-teal-500/15 shadow-sm shadow-teal-950 ring-1 ring-teal-500'
-                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Volunteer"
-                    checked={role === 'Volunteer'}
-                    onChange={() => setRole('Volunteer')}
-                    className="sr-only"
-                  />
-                  <span className="text-xl mb-1">🤝</span>
-                  <span className="font-semibold text-white text-sm">Volunteer</span>
-                  <span className="text-xs text-slate-400 mt-0.5">
-                    Support local skilling drives
-                  </span>
-                </label>
-              </div>
-            </div>
-
             {/* Submit Button */}
-            <div className="pt-2">
+            <div className="pt-3">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 shadow-lg shadow-emerald-900/40 hover:shadow-emerald-900/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-[0.99] text-sm"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 shadow-lg shadow-emerald-900/40 hover:shadow-emerald-900/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-[0.99] text-sm cursor-pointer"
               >
                 {isLoading ? (
                   <>
@@ -312,11 +318,11 @@ export default function SignUpPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    <span>Creating Account...</span>
+                    <span>Registering New {role}...</span>
                   </>
                 ) : (
                   <>
-                    <span>Create GlobeSkill Account</span>
+                    <span>Register as {role}</span>
                     <span>&rarr;</span>
                   </>
                 )}
@@ -324,11 +330,11 @@ export default function SignUpPage() {
             </div>
           </form>
 
-          {/* Bottom Link */}
+          {/* Bottom Sign In Link */}
           <div className="mt-6 pt-6 border-t border-slate-800/80 text-center text-sm text-slate-400">
-            Already have an account?{' '}
+            Already registered on GlobeSkill?{' '}
             <Link href="/login" className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
-              Sign in here
+              Sign in to Portal
             </Link>
           </div>
 

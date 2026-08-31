@@ -123,8 +123,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Rule 3: Already logged in & requesting login/signup -> Redirect to homepage
-  if (isAuthRoute && user) {
+  // Rule 3: Only redirect if genuinely authenticated with Supabase session (not mock_role demo)
+  const isRealUser = user && user.id !== 'mock-demo-user-uuid';
+  if (isAuthRoute && isRealUser) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
